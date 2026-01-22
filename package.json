@@ -1,0 +1,24 @@
+{
+  "name": "corner-shop-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix admin && npm run build --prefix admin",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/divverma2003/corner-shop-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/divverma2003/corner-shop-app/issues"
+  },
+  "homepage": "https://github.com/divverma2003/corner-shop-app#readme"
+}
