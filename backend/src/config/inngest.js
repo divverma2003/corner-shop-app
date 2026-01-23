@@ -34,7 +34,43 @@ const syncUser = inngest.createFunction(
       addresses: [],
       wishlist: [],
     };
+    // TODO: send welcome email to user
+
     await User.create(newUser);
+  },
+);
+const updateUserInDB = inngest.createFunction(
+  {
+    id: "update-user-in-db",
+    name: "Update User",
+    description: "Update user in the database when updated in Clerk",
+  },
+  { event: "clerk/user.updated" },
+  async ({ event }) => {
+    await connectDB();
+    const {
+      email_addresses,
+      id: clerkId,
+      first_name,
+      last_name,
+      image_url,
+    } = event.data;
+
+    const update = {};
+
+    const email = email_addresses[0]?.email_address;
+    if (email) update.email = email;
+
+    const name = [first_name, last_name].filter(Boolean).join(" ").trim();
+    if (name) update.name = name;
+
+    if (typeof image_url !== "undefined") update.imageUrl = image_url || null;
+
+    await User.findOneAndUpdate(
+      { clerkId },
+      { $set: update },
+      { upsert: true },
+    );
   },
 );
 
@@ -52,4 +88,4 @@ const deleteUserFromDB = inngest.createFunction(
   },
 );
 // create an array of event listeners
-export const functions = [syncUser, deleteUserFromDB];
+export const functions = [syncUser, deleteUserFromDB, updateUserInDB];
