@@ -26,17 +26,25 @@ const syncUser = inngest.createFunction(
       last_name,
       image_url,
     } = event.data;
+
+    const email = email_addresses?.[0]?.email_address;
+    const name = [first_name, last_name].filter(Boolean).join(" ").trim();
+
     const newUser = {
       clerkId,
-      email: email_addresses[0]?.email_address,
-      name: `${first_name || ""} ${last_name || ""}` || "User",
-      imageUrl: image_url || null,
+      email: email || null,
+      name: name || "User",
+      imageUrl: typeof image_url !== "undefined" ? image_url || null : null,
       addresses: [],
       wishlist: [],
     };
     // TODO: send welcome email to user
 
-    await User.create(newUser);
+    await User.findOneAndUpdate(
+      { clerkId },
+      { $setOnInsert: newUser },
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+    );
   },
 );
 const updateUserInDB = inngest.createFunction(
@@ -66,11 +74,10 @@ const updateUserInDB = inngest.createFunction(
 
     if (typeof image_url !== "undefined") update.imageUrl = image_url || null;
 
-    await User.findOneAndUpdate(
-      { clerkId },
-      { $set: update },
-      { upsert: true },
-    );
+    // If no fields to update, return
+    if (Object.keys(update).length === 0) return;
+
+    await User.findOneAndUpdate({ clerkId }, { $set: update }, { new: true });
   },
 );
 
