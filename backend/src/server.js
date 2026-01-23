@@ -3,11 +3,16 @@ import path from "path";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
+import { serve } from "inngest/express";
+import { inngest, functions } from "./config/inngest.js";
 
 const app = express();
 const __dirname = path.resolve();
 
 app.use(clerkMiddleware()); // adds auth object to request => req.auth
+app.use(express.json());
+
+app.use("/api/inngest", serve({ client: inngest, functions }));
 // test route
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "API success" });
