@@ -21,7 +21,7 @@ app.get("/api/health", (req, res) => {
 // deployment for frontend
 // serve static files and index.html in production
 // this will allow the frontend and backend to be hosted on the same domain
-if (ENV.NODE_ENV === "development") {
+if (ENV.NODE_ENV !== "development") {
   app.use(express.static(path.join(__dirname, "../admin/dist")));
 
   // display index.html for any route not handled by the backend

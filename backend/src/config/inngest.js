@@ -66,7 +66,7 @@ const updateUserInDB = inngest.createFunction(
 
     const update = {};
 
-    const email = email_addresses[0]?.email_address;
+    const email = email_addresses?.[0]?.email_address;
     if (email) update.email = email;
 
     const name = [first_name, last_name].filter(Boolean).join(" ").trim();
