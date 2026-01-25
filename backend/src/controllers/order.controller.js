@@ -78,7 +78,7 @@ export const getUserOrders = async (req, res) => {
       orders.map(async (order) => {
         return {
           ...order.toObject(),
-          hasReviewed: reviewedOrderIds(order._id.toString()),
+          hasReviewed: reviewedOrderIds.has(order._id.toString()),
         };
       }),
     );

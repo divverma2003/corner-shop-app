@@ -4,7 +4,7 @@ import { createOrder, getUserOrders } from "../controllers/order.controller.js";
 
 const router = Router();
 
-app.use(protectRoute);
+router.use(protectRoute);
 
 router.post("/", createOrder);
 router.get("/", getUserOrders);
