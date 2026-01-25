@@ -159,13 +159,11 @@ export const updateOrderStatus = async (req, res) => {
 
 export const getAllCustomers = async (_, res) => {
   try {
-    const customers = (await User.find()).toSorted({ createdAt: -1 }); // last created user first
-    return res
-      .status(200)
-      .json({
-        data: customers,
-        message: "All customers successfully fetched.",
-      });
+    const customers = await User.find().sort({ createdAt: -1 }); // last created user first
+    return res.status(200).json({
+      data: customers,
+      message: "All customers successfully fetched.",
+    });
   } catch (error) {
     console.error("Error in getAllCustomers controller: ", error);
     res.status(500).json({ error: "Internal server error" });

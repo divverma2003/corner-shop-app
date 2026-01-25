@@ -27,7 +27,7 @@ app.use("/api/users", userRoutes);
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "API success" });
 });
-if (ENV.NODE_ENV !== "development") {
+if (ENV.NODE_ENV === "development") {
   app.use(express.static(path.join(__dirname, "../admin/dist")));
 
   // display index.html for any route not handled by the backend

@@ -58,7 +58,7 @@ export const getAddresses = async (req, res) => {
       data: { addresses: user.addresses },
     });
   } catch (error) {
-    console.error("Error in addAddress controller: ", error);
+    console.error("Error in getAddress controller: ", error);
 
     res.status(500).json({ error: "Internal server error" });
   }
@@ -99,7 +99,7 @@ export const updateAddress = async (req, res) => {
     address.state = state || address.state;
     address.zipCode = zipCode || address.zipCode;
     address.phoneNumber = phoneNumber || address.phoneNumber;
-    address.isDefault !== undefined ? isDefault : address.isDefault;
+    address.isDefault = isDefault !== undefined ? isDefault : address.isDefault;
 
     await user.save();
 
@@ -119,7 +119,7 @@ export const deleteAddress = async (req, res) => {
     const { addressId } = req.params;
     const user = req.user;
 
-    user.addressses.pull(addressId);
+    user.addresses.pull(addressId);
     await user.save();
 
     return res.status(200).json({
@@ -166,7 +166,7 @@ export const removeFromWishlist = async (req, res) => {
 
     if (!user.wishlist.includes(productId)) {
       return res.status(400).json({
-        error: "This product is not in your wishlisst.",
+        error: "This product is not in your wishlist.",
       });
     }
 
@@ -185,6 +185,7 @@ export const removeFromWishlist = async (req, res) => {
 
 export const getWishlist = async (req, res) => {
   try {
+    // use populate() to fetch information about the wishlist (not just ids )
     const user = await User.findById(req.user._id).populate("wishlist");
 
     return res.status(200).json({
