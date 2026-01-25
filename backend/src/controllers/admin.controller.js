@@ -44,7 +44,7 @@ export const createProduct = async (_, res) => {
 
     return res
       .status(201)
-      .json({ data: product, message: "Product sucessfully created." });
+      .json({ data: product, message: "Product successfully created." });
   } catch (error) {
     console.error("Error in createProduct controller: ", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -98,7 +98,7 @@ export const updateProduct = async (req, res) => {
     await product.save();
     return res
       .status(201)
-      .json({ data: product, message: "Product sucessfully updated." });
+      .json({ data: product, message: "Product successfully updated." });
   } catch (error) {
     console.error("Error in updateProducts controller: ", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -115,7 +115,7 @@ export const getAllOrders = async (_, res) => {
 
     return res
       .status(200)
-      .json({ data: orders, message: "All orders sucessfully fetched." });
+      .json({ data: orders, message: "All orders successfully fetched." });
   } catch (error) {
     console.error("Error in getAllOrders controller: ", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -150,7 +150,7 @@ export const updateOrderStatus = async (req, res) => {
 
     return res
       .status(200)
-      .json({ data: order, message: "Order status sucessfully updated." });
+      .json({ data: order, message: "Order status successfully updated." });
   } catch (error) {
     console.error("Error in updateOrderStatus controller", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -159,10 +159,11 @@ export const updateOrderStatus = async (req, res) => {
 
 export const getAllCustomers = async (_, res) => {
   try {
-    const customers = (await User.find()).toSorted({ createdAt: -1 }); // last created user first
-    return res
-      .status(200)
-      .json({ data: customers, message: "All customers sucessfully fetched." });
+    const customers = await User.find().sort({ createdAt: -1 }); // last created user first
+    return res.status(200).json({
+      data: customers,
+      message: "All customers successfully fetched.",
+    });
   } catch (error) {
     console.error("Error in getAllCustomers controller: ", error);
     res.status(500).json({ error: "Internal server error" });
@@ -192,7 +193,7 @@ export const getDashboardStats = async (_, res) => {
         totalCustomers,
         totalProducts,
       },
-      message: "Admin metrics sucessfully fetched.",
+      message: "Admin metrics successfully fetched.",
     });
   } catch (error) {
     console.error("Error in getDashboardStats controller: ", error);
@@ -221,7 +222,7 @@ export const deleteProduct = async (req, res) => {
     }
     await Product.findByIdAndDelete(id);
 
-    return res.status(200).json({ message: "Product sucessfully deleted." });
+    return res.status(200).json({ message: "Product successfully deleted." });
   } catch (error) {
     console.error("Error in deleteProduct controller:", error);
     res.status(500).json({ message: "Internal server error" });
