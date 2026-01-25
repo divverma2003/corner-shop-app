@@ -190,7 +190,7 @@ export const getWishlist = async (req, res) => {
 
     return res.status(200).json({
       message: "Wishlist fetched successfully.",
-      user: { wishlist: user.wishlist },
+      data: { wishlist: user.wishlist },
     });
   } catch (error) {
     console.error("Error in getWishlist controller: ", error);
