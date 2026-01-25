@@ -5,7 +5,9 @@ import { connectDB } from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./config/inngest.js";
+
 import adminRoutes from "./routes/admin.route.js";
+import userRoutes from "./routes/user.route.js";
 
 const app = express();
 const __dirname = path.resolve();
@@ -15,13 +17,16 @@ app.use(express.json());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 // test route
-app.get("/api/health", (req, res) => {
-  res.status(200).json({ message: "API success" });
-});
+
 app.use("/api/admin", adminRoutes);
+app.use("/api/users", userRoutes);
 // deployment for frontend
 // serve static files and index.html in production
 // this will allow the frontend and backend to be hosted on the same domain
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ message: "API success" });
+});
 if (ENV.NODE_ENV !== "development") {
   app.use(express.static(path.join(__dirname, "../admin/dist")));
 
