@@ -6,6 +6,12 @@ export const createReview = async (req, res) => {
   try {
     const { productId, orderId, rating } = req.body;
 
+    if (!productId || !orderId) {
+      return res.status(400).json({
+        error: "productId and orderId are required",
+      });
+    }
+
     if (!rating || rating < 1 || rating > 5) {
       return res.status(400).json({
         error: "Rating must be between 1 and 5.",
@@ -64,17 +70,22 @@ export const createReview = async (req, res) => {
     });
 
     // update the product rating with atomic aggregation
-
-    const reviews = await Review.find({ productId });
-    const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
+    const reviews = await Review.aggregate([
+      { $match: { productId: new mongoose.Types.ObjectId(productId) } },
       {
-        averageRating: totalRating / reviews.length,
-        totalReviews: reviews.length,
+        $group: {
+          _id: null,
+          avgRating: { $avg: "$rating" },
+          count: { $sum: 1 },
+        },
       },
-      { new: true, runValidators: true },
-    );
+    ]);
+
+    const stats = result[0] || { avgRating: 0, count: 0 };
+    const updatedProduct = await Product.findByIdAndUpdate(productId, {
+      averageRating: stats.avgRating,
+      totalReviews: stats.count,
+    });
 
     if (!updatedProduct) {
       await Review.findByIdAndDelete(review._id);

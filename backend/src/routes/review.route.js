@@ -7,6 +7,7 @@ import {
 } from "../controllers/review.controller.js";
 
 const router = Router();
+router.use(protectRoute);
 
 router.post("/", createReview);
 router.delete("/:reviewId", deleteReview);
