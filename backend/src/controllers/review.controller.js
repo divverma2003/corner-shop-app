@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import { Order } from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
 import { Review } from "../models/review.model.js";
@@ -81,7 +83,7 @@ export const createReview = async (req, res) => {
       },
     ]);
 
-    const stats = result[0] || { avgRating: 0, count: 0 };
+    const stats = reviews[0] || { avgRating: 0, count: 0 };
     const updatedProduct = await Product.findByIdAndUpdate(productId, {
       averageRating: stats.avgRating,
       totalReviews: stats.count,
