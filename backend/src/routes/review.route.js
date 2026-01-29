@@ -10,6 +10,7 @@ const router = Router();
 router.use(protectRoute);
 
 router.post("/", createReview);
+// todo: implement in the frontend
 router.delete("/:reviewId", deleteReview);
 
 export default router;

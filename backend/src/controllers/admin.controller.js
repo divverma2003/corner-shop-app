@@ -64,7 +64,7 @@ export const getAllProducts = async (_, res) => {
   }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (_, res) => {
   try {
     const { id } = req.params;
     const { name, description, price, stock, category } = req.body;
@@ -122,7 +122,7 @@ export const getAllOrders = async (_, res) => {
   }
 };
 
-export const updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (_, res) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
@@ -201,7 +201,7 @@ export const getDashboardStats = async (_, res) => {
   }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (_, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
