@@ -8,6 +8,7 @@ export const createOrder = async (req, res) => {
 
     const { orderItems, shippingAddress, paymentResult, totalPrice } = req.body;
 
+    // validate order items
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({
         error: "No order items",
@@ -56,8 +57,11 @@ export const createOrder = async (req, res) => {
   }
 };
 
+// get orders for logged-in user
+// include review status
 export const getUserOrders = async (req, res) => {
   try {
+    // fetch orders for the logged-in user
     const orders = await Order.find({
       clerkId: req.user.clerkId,
     })
@@ -67,22 +71,26 @@ export const getUserOrders = async (req, res) => {
     // check if each order has been reviewed
     // todo: check on frontend
 
+    // check if each order has been reviewed
     const orderIds = orders.map((order) => order._id);
+
+    // fetch reviews for these orders
     const reviews = await Review.find({
       orderId: { $in: orderIds },
     });
+
+    // create a set of reviewed order IDs for quick lookup
     const reviewedOrderIds = new Set(
       reviews.map((review) => review.orderId.toString()),
     );
-    const ordersWithReviewStatus = await Promise.all(
-      orders.map(async (order) => {
-        return {
-          ...order.toObject(),
-          hasReviewed: reviewedOrderIds.has(order._id.toString()),
-        };
-      }),
-    );
 
+    // map orders to include review status
+    const ordersWithReviewStatus = orders.map((order) => ({
+      ...order.toObject(),
+      hasReviewed: reviewedOrderIds.has(order._id.toString()),
+    }));
+
+    // respond with orders including review status
     return res.status(200).json({
       message: `Orders for user ${req.user.clerkId} fetched successfully.`,
       data: ordersWithReviewStatus,

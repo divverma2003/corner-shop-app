@@ -73,8 +73,10 @@ export const createReview = async (req, res) => {
 
     // update the product rating with atomic aggregation
     const reviews = await Review.aggregate([
+      // first, match reviews for the specific product
       { $match: { productId: new mongoose.Types.ObjectId(productId) } },
       {
+        // then, group to calculate avg rating and count
         $group: {
           _id: null,
           avgRating: { $avg: "$rating" },
@@ -83,6 +85,7 @@ export const createReview = async (req, res) => {
       },
     ]);
 
+    // then, update the product with these stats
     const stats = reviews[0] || { avgRating: 0, count: 0 };
     const updatedProduct = await Product.findByIdAndUpdate(productId, {
       averageRating: stats.avgRating,
@@ -122,10 +125,12 @@ export const deleteReview = async (req, res) => {
       });
     }
 
+    // delete review and update product ratings
     const productId = review.productId;
     await Review.findByIdAndDelete(reviewId);
     const reviews = await Review.find({ productId });
 
+    // recalculate average rating and total reviews
     const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
     await Product.findByIdAndUpdate(productId, {
       averageRating: reviews.length > 0 ? totalRating / reviews.length : 0,

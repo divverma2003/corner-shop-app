@@ -14,6 +14,7 @@ export const ENV = {
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+  CLIENT_URL: process.env.CLIENT_URL,
 };
 
 // Validate required environment variables
@@ -26,7 +27,9 @@ const required = [
   "CLOUDINARY_API_SECRET",
   "INNGEST_SIGNING_KEY",
   "ADMIN_EMAIL",
+  "CLIENT_URL",
 ];
+
 const missing = required.filter((key) => !ENV[key]);
 if (missing.length) {
   throw new Error(
