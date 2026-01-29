@@ -85,14 +85,10 @@ export const getUserOrders = async (req, res) => {
     );
 
     // map orders to include review status
-    const ordersWithReviewStatus = await Promise.all(
-      orders.map(async (order) => {
-        return {
-          ...order.toObject(),
-          hasReviewed: reviewedOrderIds.has(order._id.toString()),
-        };
-      }),
-    );
+    const ordersWithReviewStatus = orders.map((order) => ({
+      ...order.toObject(),
+      hasReviewed: reviewedOrderIds.has(order._id.toString()),
+    }));
 
     // respond with orders including review status
     return res.status(200).json({

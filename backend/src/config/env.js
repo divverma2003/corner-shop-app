@@ -27,7 +27,9 @@ const required = [
   "CLOUDINARY_API_SECRET",
   "INNGEST_SIGNING_KEY",
   "ADMIN_EMAIL",
+  "CLIENT_URL",
 ];
+
 const missing = required.filter((key) => !ENV[key]);
 if (missing.length) {
   throw new Error(
