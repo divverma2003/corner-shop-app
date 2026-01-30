@@ -148,7 +148,7 @@ export const updateCartItem = async (req, res) => {
     const qty = Number(quantity);
 
     // validate quantity
-    if (!Number.isInteger(qty)) {
+    if (!Number.isInteger(qty) || qty < 1) {
       return res.status(400).json({ message: "Quantity must be at least 1" });
     }
 
