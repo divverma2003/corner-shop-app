@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosInstance from "./axios.js";
 
 export const productApi = {
@@ -14,7 +13,7 @@ export const productApi = {
   },
 
   update: async ({ id, formData }) => {
-    const { data } = await axiosInstance.put(`/admin/products${id}`, formData);
+    const { data } = await axiosInstance.put(`/admin/products/${id}`, formData);
     return data;
   },
 };

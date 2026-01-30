@@ -2,7 +2,7 @@ import { useUser } from "@clerk/clerk-react";
 import { ShoppingBagIcon } from "lucide-react";
 import { Link, useLocation } from "react-router";
 
-import { NAVIGATION } from "./NavBar.jsx";
+import { NAVIGATION } from "./Navbar.jsx";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -50,7 +50,7 @@ const Sidebar = () => {
             <div className="avatar shrink-0">
               <img
                 src={user?.imageUrl}
-                alt={user?.name}
+                alt={user?.fullName}
                 className="w-10 h-10 rounded-full"
               />
             </div>

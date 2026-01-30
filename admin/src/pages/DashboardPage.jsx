@@ -7,7 +7,7 @@ import {
 import {
   capitalizeText,
   formatDate,
-  getOrderStatusBadgeColor,
+  getOrderStatusBadge,
 } from "../lib/utils.js";
 import { useQuery } from "@tanstack/react-query";
 import { orderApi, statsApi } from "../lib/api.js";
@@ -24,10 +24,11 @@ const DashboardPage = () => {
   });
 
   // Get 5 most recent orders
-  const recentOrders =
-    [...ordersData.orders]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, 5) || [];
+  const recentOrders = ordersData?.orders
+    ? [...ordersData.orders]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5)
+    : [];
 
   const statsCards = [
     {
@@ -113,7 +114,7 @@ const DashboardPage = () => {
                         <div className="text-sm">
                           {order.orderItems[0]?.name}{" "}
                           {order.orderItems.length > 1 &&
-                            `${order.orderItems.length - 1} more`}
+                            `+${order.orderItems.length - 1} more`}
                         </div>
                       </td>
                       <td>
@@ -123,7 +124,7 @@ const DashboardPage = () => {
                       </td>
                       <td>
                         <div
-                          className={`badge ${getOrderStatusBadgeColor(order.status)}`}
+                          className={`badge ${getOrderStatusBadge(order.status)}`}
                         >
                           {capitalizeText(order.status)}
                         </div>

@@ -39,7 +39,6 @@ const NavBar = () => {
 
   return (
     <div className="navbar w-full bg-base-300">
-      NavBar
       <label
         htmlFor="my-drawer"
         className="btn btn-square btn-ghost"
