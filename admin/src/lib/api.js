@@ -4,28 +4,28 @@ export const productApi = {
   getAll: async () => {
     const { data } = await axiosInstance.get("/admin/products");
 
-    return data;
+    return data.data;
   },
 
   create: async (formData) => {
     const { data } = await axiosInstance.post("/admin/products", formData);
-    return data;
+    return data.data;
   },
 
   update: async ({ id, formData }) => {
     const { data } = await axiosInstance.put(`/admin/products/${id}`, formData);
-    return data;
+    return data.data;
   },
   delete: async (productId) => {
     const { data } = await axiosInstance.delete(`/admin/products/${productId}`);
-    return data;
+    return data.data;
   },
 };
 
 export const orderApi = {
   getAll: async () => {
     const { data } = await axiosInstance.get("/admin/orders");
-    return data;
+    return data.data;
   },
   // pass orderId and new status
   updateStatus: async ({ orderId, status }) => {
@@ -33,13 +33,13 @@ export const orderApi = {
       `/admin/orders/${orderId}/status`,
       { status },
     );
-    return data;
+    return data.data;
   },
 };
 
 export const statsApi = {
   getDashboard: async () => {
     const { data } = await axiosInstance.get("/admin/stats");
-    return data;
+    return data.data;
   },
 };
