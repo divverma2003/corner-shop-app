@@ -9,7 +9,8 @@ const Sidebar = () => {
   const { user } = useUser();
 
   return (
-    <div className="drawer-side is-drawer-close:overflow-visible">
+    <div className="drawer-side is-drawer-close:overflow-visible ">
+      {/* overlay to close sidebar on small screens */}
       <label
         htmlFor="my-drawer"
         aria-label="close sidebar"
@@ -17,6 +18,7 @@ const Sidebar = () => {
       ></label>
 
       <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+        {/* sidebar header with icon and title */}
         <div className="p-4 w-full">
           <div className="flex items-center gap-3">
             <div className="size-10 bg-primary rounded-xl flex items-center justify-center shrink-0">
@@ -28,6 +30,7 @@ const Sidebar = () => {
           </div>
         </div>
 
+        {/* navigation links */}
         <ul className="menu w-full grow flex flex-col gap-2">
           {NAVIGATION.map((item) => {
             const isActive = location.pathname === item.path;
@@ -45,6 +48,7 @@ const Sidebar = () => {
           })}
         </ul>
 
+        {/* user info at the bottom of the sidebar */}
         <div className="p-4 w-full">
           <div className="flex items-center gap-3">
             <div className="avatar shrink-0">

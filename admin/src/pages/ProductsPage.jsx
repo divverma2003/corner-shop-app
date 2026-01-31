@@ -40,6 +40,9 @@ const ProductsPage = () => {
         queryKey: ["products"],
       });
     },
+    onError: (error) => {
+      alert("Failed to create product. Please try again.");
+    },
   });
 
   const updateProductMutation = useMutation({
@@ -50,6 +53,9 @@ const ProductsPage = () => {
         queryKey: ["products"],
       });
     },
+    onError: (error) => {
+      alert("Failed to update product. Please try again.");
+    },
   });
 
   const deleteProductMutation = useMutation({
@@ -59,6 +65,9 @@ const ProductsPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["products"],
       });
+    },
+    onError: (error) => {
+      alert("Failed to delete product. Please try again.");
     },
   });
 
@@ -73,6 +82,11 @@ const ProductsPage = () => {
       stock: "",
       description: "",
     });
+    // Revoke blob URLs to prevent memory leaks
+    imagePreviews.forEach((url) => {
+      if (url.startsWith("blob:")) URL.revokeObjectURL(url);
+    });
+
     setImages([]);
     setImagePreviews([]);
   };
@@ -122,7 +136,9 @@ const ProductsPage = () => {
 
     // only append new images if they were selected
     if (images.length > 0) {
-      images.forEach((image) => formDataToSend.append("images", image));
+      images.forEach((image) => {
+        formDataToSend.append("images", image);
+      });
     }
 
     if (editingProduct) {
@@ -165,7 +181,10 @@ const ProductsPage = () => {
                 <div className="flex items-center gap-6">
                   <div className="avatar">
                     <div className="w-20 rounded-xl">
-                      <img src={product.images[0]} alt={product.name}></img>
+                      <img
+                        src={product?.images[0] || "/placeholder.png"}
+                        alt={product.name}
+                      ></img>
                     </div>
                   </div>
 
@@ -199,8 +218,11 @@ const ProductsPage = () => {
                     </div>
                   </div>
                   <div className="card-actions">
-                    <button className="btn btn-square btn-ghost">
-                      <PencilIcon className="size-5" />{" "}
+                    <button
+                      className="btn btn-square btn-ghost"
+                      onClick={() => handleEdit(product)}
+                    >
+                      <PencilIcon className="size-5" />
                     </button>
                     <button
                       className="btn btn-square btn-ghost text-error"

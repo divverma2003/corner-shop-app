@@ -107,15 +107,17 @@ export const updateProduct = async (req, res) => {
 
 export const getAllOrders = async (_, res) => {
   try {
+    // send the last 5 items created
     const orders = await Order.find()
       .populate("user", "name email")
       .populate("orderItems.product")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .limit(5);
     // link user's name and email from user id in "order"
 
     return res
       .status(200)
-      .json({ data: orders, message: "All orders successfully fetched." });
+      .json({ data: orders, message: "Latest orders successfully fetched." });
   } catch (error) {
     console.error("Error in getAllOrders controller: ", error);
     return res.status(500).json({ message: "Internal server error" });

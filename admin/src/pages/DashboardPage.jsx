@@ -23,12 +23,8 @@ const DashboardPage = () => {
     queryFn: statsApi.getDashboard,
   });
 
-  // Get 5 most recent orders
-  const recentOrders = ordersData?.orders
-    ? [...ordersData.orders]
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 5)
-    : [];
+  // fetch 5 most recent orders (already sorted in backend)
+  const recentOrders = ordersData?.orders ? ordersData.orders : [];
 
   const statsCards = [
     {
