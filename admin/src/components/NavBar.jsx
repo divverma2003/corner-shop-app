@@ -33,7 +33,7 @@ export const NAVIGATION = [
   },
 ];
 
-const NavBar = () => {
+const Navbar = () => {
   // to get the current path
   const location = useLocation();
 
@@ -62,4 +62,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default Navbar;
