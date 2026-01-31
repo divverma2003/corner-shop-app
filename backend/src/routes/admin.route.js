@@ -7,6 +7,7 @@ import {
   getDashboardStats,
   updateProduct,
   updateOrderStatus,
+  deleteProduct,
 } from "../controllers/admin.controller.js";
 
 import { protectRoute, adminOnly } from "../middleware/auth.middleware.js";
@@ -21,7 +22,7 @@ router.get("/products", getAllProducts);
 router.put("/products/:id", upload.array("images", 3), updateProduct);
 router.get("/orders", getAllOrders);
 router.patch("/orders/:orderId/status", updateOrderStatus);
-
+router.delete("/products/:productId", deleteProduct);
 router.get("/customers", getAllCustomers);
 router.get("/stats", getDashboardStats);
 export default router;
