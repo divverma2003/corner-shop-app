@@ -39,6 +39,7 @@ const NavBar = () => {
 
   return (
     <div className="navbar w-full bg-base-300">
+      {/* button to open sidebar on small screens */}
       <label
         htmlFor="my-drawer"
         className="btn btn-square btn-ghost"
@@ -46,12 +47,14 @@ const NavBar = () => {
       >
         <PanelLeftIcon className="size-5" />
       </label>
+      {/* dynamic title based on the current path */}
       <div className="flex-1 px-4">
         <h1 className="text-xl font-bold">
           {NAVIGATION.find((item) => item.path === location.pathname)?.name ||
             "Dashboard"}
         </h1>
       </div>
+      {/* user button on the right side */}
       <div className="mr-5">
         <UserButton />
       </div>

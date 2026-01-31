@@ -6,7 +6,7 @@ export const capitalizeText = (text) => {
 export const getOrderStatusBadge = (status) => {
   switch (status?.toLowerCase()) {
     case "delivered":
-      return "bade-success";
+      return "bagde-success";
     case "shipped":
       return "badge-info";
     case "pending":

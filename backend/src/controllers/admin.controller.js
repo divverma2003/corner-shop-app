@@ -107,15 +107,17 @@ export const updateProduct = async (req, res) => {
 
 export const getAllOrders = async (_, res) => {
   try {
+    // send the last 5 items created
     const orders = await Order.find()
       .populate("user", "name email")
       .populate("orderItems.product")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .limit(5);
     // link user's name and email from user id in "order"
 
     return res
       .status(200)
-      .json({ data: orders, message: "All orders successfully fetched." });
+      .json({ data: orders, message: "Latest orders successfully fetched." });
   } catch (error) {
     console.error("Error in getAllOrders controller: ", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -205,6 +207,7 @@ export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
+
     if (!product) {
       return res.status(404).json({ message: "Product not found." });
     }
@@ -213,6 +216,7 @@ export const deleteProduct = async (req, res) => {
     if (product.images && product.images.length > 0) {
       const deletePromises = product.images.map((imageUrl) => {
         // extract public_id from URL
+        // assumes format: .../products/imagename.ext
         const publicId =
           "products/" + imageUrl.split("/products/")[1]?.split(".")[0];
         if (publicId) return cloudinary.uploader.destroy(publicId);
