@@ -1,4 +1,4 @@
-import mongoose, { get } from "mongoose";
+import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import { ENV } from "../config/env.js";
 
@@ -148,7 +148,7 @@ const products = [
 const seedProductsToDB = async () => {
   try {
     // connect to MongoDB
-    await mongoose.connect(ENV.MONGODB_URI);
+    await mongoose.connect(ENV.DB_URL);
     console.log("✅ Connected to MongoDB");
 
     // clear existing products

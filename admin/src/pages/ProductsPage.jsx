@@ -13,6 +13,7 @@ import { categories } from "../lib/constants.js";
 
 const ProductsPage = () => {
   const [showModal, setShowModal] = useState(false);
+  // the state to track if we are editing a product, and which one
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -35,6 +36,9 @@ const ProductsPage = () => {
   const createProductMutation = useMutation({
     mutationFn: productApi.create,
     onSuccess: () => {
+      // upon success, close modal and refetch products list by
+      // invalidating the products query and letting it run again
+      // purpose: to update the list in UI
       closeModal();
       queryClient.invalidateQueries({
         queryKey: ["products"],
@@ -47,7 +51,10 @@ const ProductsPage = () => {
 
   const updateProductMutation = useMutation({
     mutationFn: productApi.update,
+    // upon success, close modal and refetch products list by
+    // invalidating the products query and letting it run again
     onSuccess: () => {
+      // todo: use a toast notification
       closeModal();
       queryClient.invalidateQueries({
         queryKey: ["products"],
@@ -93,6 +100,8 @@ const ProductsPage = () => {
 
   const handleEdit = (product) => {
     setEditingProduct(product);
+
+    // populate form data
     setFormData({
       name: product.name,
       category: product.category,
@@ -137,6 +146,7 @@ const ProductsPage = () => {
     // only append new images if they were selected
     if (images.length > 0) {
       images.forEach((image) => {
+        // key name should match what backend expects
         formDataToSend.append("images", image);
       });
     }
@@ -177,7 +187,10 @@ const ProductsPage = () => {
           const status = getStockStatusBadge(product.stock);
           return (
             <div key={product._id} className="card bg-base-100 shadow-xl">
+              {/* PRODUCT CARD */}
+
               <div className="card-body">
+                {/* PRODUCT PICTURE */}
                 <div className="flex items-center gap-6">
                   <div className="avatar">
                     <div className="w-20 rounded-xl">
@@ -188,6 +201,7 @@ const ProductsPage = () => {
                     </div>
                   </div>
 
+                  {/* PRODUCT DETAILS & ACTIONS */}
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
@@ -217,6 +231,8 @@ const ProductsPage = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* CARD ACTIONS */}
                   <div className="card-actions">
                     <button
                       className="btn btn-square btn-ghost"
@@ -260,12 +276,13 @@ const ProductsPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* TOP ROW: NAME & CATEGORY */}
             <div className="grid grid-cols-2 gap-4">
+              {/* NAME INPUT */}
               <div className="form-control">
                 <label className="label">
                   <span>Product Name</span>
                 </label>
-
                 <input
                   type="text"
                   placeholder="Enter product name"
@@ -281,6 +298,7 @@ const ProductsPage = () => {
                 />
               </div>
 
+              {/* CATEGORY INPUT */}
               <div className="form-control">
                 <label className="label">
                   <span>Category</span>
@@ -303,7 +321,26 @@ const ProductsPage = () => {
               </div>
             </div>
 
+            {/* SECOND ROW: PRICE, STOCK */}
             <div className="grid grid-cols-2 gap-4">
+              {/* PRICE INPUT */}
+              <div className="form-control">
+                <label className="label">
+                  <span>Price ($)</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  className="input input-bordered"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              {/* STOCK INPUT */}
               <div className="form-control">
                 <label className="label">
                   <span>Stock</span>
@@ -319,94 +356,97 @@ const ProductsPage = () => {
                   required
                 />
               </div>
+            </div>
 
-              <div className="form-control flex flex-col gap-2">
-                <label className="label">
-                  <span>Description</span>
-                </label>
-                <textarea
-                  className="textarea textarea-bordered h-24 w-full"
-                  placeholder="Enter product description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  required
+            {/* DESCRIPTION INPUT */}
+            <div className="form-control flex flex-col gap-2">
+              <label className="label">
+                <span>Description</span>
+              </label>
+              <textarea
+                className="textarea textarea-bordered h-24 w-full"
+                placeholder="Enter product description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            {/* IMAGE UPLOAD */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold text-base flex items-center gap-2">
+                  <ImageIcon className="h-5 w-5" />
+                  Product Images
+                </span>
+                <span className="label-text-alt text-xs opacity-60">
+                  Max 3 images
+                </span>
+              </label>
+
+              <div className="bg-base-200 rounded-xl p-4 border-2 border-dashed border-base-300 hover:border-primary transition-colors">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  className="file-input file-input-bordered file-input-primary w-full"
+                  required={!editingProduct}
                 />
-              </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold text-base flex items-center gap-2">
-                    <ImageIcon className="h-5 w-5" />
-                    Product Images
-                  </span>
-                  <span className="label-text-alt text-xs opacity-60">
-                    Max 3 images
-                  </span>
-                </label>
-
-                <div className="bg-base-200 rounded-xl p-4 border-2 border-dashed border-base-300 hover:border-primary transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageChange}
-                    className="file-input file-input-bordered file-input-primary w-full"
-                    required={!editingProduct}
-                  />
-
-                  {editingProduct && (
-                    <p className="text-xs text-base-content/60 mt-2 text-center">
-                      Leave empty to keep current images
-                    </p>
-                  )}
-                </div>
-
-                {imagePreviews.length > 0 && (
-                  <div className="flex gap-2 mt-2">
-                    {imagePreviews.map((preview, index) => (
-                      <div key={index} className="avatar">
-                        <div className="w-20 rounded-lg">
-                          <img src={preview} alt={`Preview ${index + 1}`} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                {editingProduct && (
+                  <p className="text-xs text-base-content/60 mt-2 text-center">
+                    Leave empty to keep current images
+                  </p>
                 )}
               </div>
 
-              <div className="modal-action">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="btn"
-                  disabled={
-                    createProductMutation.isPending ||
-                    updateProductMutation.isPending
-                  }
-                >
-                  Cancel
-                </button>
+              {imagePreviews.length > 0 && (
+                <div className="flex gap-2 mt-2">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="avatar">
+                      <div className="w-20 rounded-lg">
+                        <img src={preview} alt={`Preview ${index + 1}`} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={
-                    createProductMutation.isPending ||
-                    updateProductMutation.isPending
-                  }
-                >
-                  {createProductMutation.isPending ||
-                  updateProductMutation.isPending ? (
-                    <span className="loading loading-spinner"></span>
-                  ) : editingProduct ? (
-                    "Update Product"
-                  ) : (
-                    "Add Product"
-                  )}
-                </button>
-              </div>
+            {/* FORM ACTIONS */}
+            <div className="modal-action">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="btn"
+                disabled={
+                  createProductMutation.isPending ||
+                  updateProductMutation.isPending
+                }
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={
+                  createProductMutation.isPending ||
+                  updateProductMutation.isPending
+                }
+              >
+                {createProductMutation.isPending ||
+                updateProductMutation.isPending ? (
+                  <span className="loading loading-spinner"></span>
+                ) : editingProduct ? (
+                  "Update Product"
+                ) : (
+                  "Add Product"
+                )}
+              </button>
             </div>
           </form>
         </div>

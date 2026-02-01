@@ -13,19 +13,23 @@ import { useQuery } from "@tanstack/react-query";
 import { orderApi, statsApi } from "../lib/api.js";
 
 const DashboardPage = () => {
+  // create react query hooks to fetch data
+  // fetch all orders from backend (to get recent orders)
   const { data: ordersData, isLoading: ordersLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: orderApi.getAll,
   });
 
+  // fetch dashboard stats from backend
   const { data: statsData, isLoading: statsLoading } = useQuery({
-    queryKey: ["dashboardStats"],
+    queryKey: ["dashboardStats"], // unique key for caching
     queryFn: statsApi.getDashboard,
   });
 
   // fetch 5 most recent orders (already sorted in backend)
   const recentOrders = ordersData?.orders ? ordersData.orders : [];
 
+  // Stats cards data
   const statsCards = [
     {
       name: "Total Revenue",
