@@ -19,7 +19,7 @@ router.use(protectRoute, adminOnly);
 
 router.post("/products", upload.array("images", 3), createProduct); // each product can use a max of 3 images ("images" is our chosen key)
 router.get("/products", getAllProducts);
-router.put("/products/:id", upload.array("images", 3), updateProduct);
+router.put("/products/:productId", upload.array("images", 3), updateProduct);
 router.get("/orders", getAllOrders);
 router.patch("/orders/:orderId/status", updateOrderStatus);
 router.delete("/products/:productId", deleteProduct);

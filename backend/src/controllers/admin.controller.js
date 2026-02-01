@@ -3,7 +3,7 @@ import { Product } from "../models/product.model.js";
 import { Order } from "../models/order.model.js";
 import { User } from "../models/user.model.js";
 
-export const createProduct = async (_, res) => {
+export const createProduct = async (req, res) => {
   try {
     const { name, description, price, stock, category } = req.body;
 
@@ -33,7 +33,7 @@ export const createProduct = async (_, res) => {
     const uploadResults = await Promise.all(uploadPromises); // returns a secure url ==> the url cloudinary is storing the image at
     const imageUrls = uploadResults.map((result) => result.secure_url);
 
-    const product = await Product.crete({
+    const product = await Product.create({
       name,
       description,
       price: parseFloat(price),
@@ -66,10 +66,10 @@ export const getAllProducts = async (_, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { productId } = req.params;
     const { name, description, price, stock, category } = req.body;
 
-    const product = await Product.findById(id);
+    const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -149,6 +149,7 @@ export const updateOrderStatus = async (req, res) => {
     }
 
     await order.save();
+    console.error("Update order status error:", error);
 
     return res
       .status(200)
@@ -205,8 +206,8 @@ export const getDashboardStats = async (_, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const { id } = req.params;
-    const product = await Product.findById(id);
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found." });
@@ -224,7 +225,7 @@ export const deleteProduct = async (req, res) => {
 
       await Promise.all(deletePromises.filter(Boolean));
     }
-    await Product.findByIdAndDelete(id);
+    await Product.findByIdAndDelete(productId);
 
     return res.status(200).json({ message: "Product successfully deleted." });
   } catch (error) {
