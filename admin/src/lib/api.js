@@ -3,7 +3,6 @@ import axiosInstance from "./axios.js";
 export const productApi = {
   getAll: async () => {
     const { data } = await axiosInstance.get("/admin/products");
-
     return data.data;
   },
 
@@ -40,6 +39,13 @@ export const orderApi = {
 export const statsApi = {
   getDashboard: async () => {
     const { data } = await axiosInstance.get("/admin/stats");
+    return data.data;
+  },
+};
+
+export const customerApi = {
+  getAll: async () => {
+    const { data } = await axiosInstance.get("/admin/customers");
     return data.data;
   },
 };
