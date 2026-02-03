@@ -46,6 +46,7 @@ const ProductsPage = () => {
     },
     onError: (error) => {
       alert("Failed to create product. Please try again.");
+      console.error("Create product error:", error);
     },
   });
 
@@ -62,6 +63,7 @@ const ProductsPage = () => {
     },
     onError: (error) => {
       alert("Failed to update product. Please try again.");
+      console.error("Update product error:", error);
     },
   });
 
@@ -75,6 +77,7 @@ const ProductsPage = () => {
     },
     onError: (error) => {
       alert("Failed to delete product. Please try again.");
+      console.error("Delete product error:", error);
     },
   });
 

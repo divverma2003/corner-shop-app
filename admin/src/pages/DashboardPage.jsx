@@ -15,13 +15,23 @@ import { orderApi, statsApi } from "../lib/api.js";
 const DashboardPage = () => {
   // create react query hooks to fetch data
   // fetch all orders from backend (to get recent orders)
-  const { data: ordersData, isLoading: ordersLoading } = useQuery({
+  const {
+    data: ordersData,
+    isLoading: ordersLoading,
+    isError: ordersError,
+    error: ordersErrorMessage,
+  } = useQuery({
     queryKey: ["orders"],
     queryFn: orderApi.getAll,
   });
 
   // fetch dashboard stats from backend
-  const { data: statsData, isLoading: statsLoading } = useQuery({
+  const {
+    data: statsData,
+    isLoading: statsLoading,
+    isError: statsError,
+    error: statsErrorMessage,
+  } = useQuery({
     queryKey: ["dashboardStats"], // unique key for caching
     queryFn: statsApi.getDashboard,
   });
@@ -33,24 +43,38 @@ const DashboardPage = () => {
   const statsCards = [
     {
       name: "Total Revenue",
-      value: statsLoading
-        ? "..."
-        : `$${statsData?.totalRevenue?.toFixed(2) || 0}`,
+      value: statsError
+        ? "Error"
+        : statsLoading
+          ? "..."
+          : `$${statsData?.totalRevenue?.toFixed(2) || 0}`,
       icon: <DollarSignIcon className="size-8" />,
     },
     {
       name: "Total Orders",
-      value: statsLoading ? "..." : statsData?.totalOrders || 0,
+      value: statsError
+        ? "Error"
+        : statsLoading
+          ? "..."
+          : statsData?.totalOrders || 0,
       icon: <ShoppingBagIcon className="size-8" />,
     },
     {
       name: "Total Customers",
-      value: statsLoading ? "..." : statsData?.totalCustomers || 0,
+      value: statsError
+        ? "Error"
+        : statsLoading
+          ? "..."
+          : statsData?.totalCustomers || 0,
       icon: <UsersIcon className="size-8" />,
     },
     {
       name: "Total Products",
-      value: statsLoading ? "..." : statsData?.totalProducts || 0,
+      value: statsError
+        ? "Error"
+        : statsLoading
+          ? "..."
+          : statsData?.totalProducts || 0,
       icon: <PackageIcon className="size-8" />,
     },
   ];
@@ -73,6 +97,15 @@ const DashboardPage = () => {
           {ordersLoading ? (
             <div className="flex justify-center py-8">
               <span className="loading loading-spinner loading-lg" />
+            </div>
+          ) : ordersError ? (
+            <div className="text-center py-12 text-base-content/60">
+              <p className="text-xl font-semibold mb-2">
+                Failed to load orders
+              </p>
+              <p className="text-sm">
+                {ordersErrorMessage?.message ?? "Please try again."}
+              </p>
             </div>
           ) : recentOrders.length === 0 ? (
             <div className="text-center py-8 text-base-content/60">
