@@ -3,7 +3,7 @@ import { customerApi } from "../lib/api.js";
 import { formatDate } from "../lib/utils.js";
 
 const CustomersPage = () => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["customers"],
     queryFn: customerApi.getAll,
   });
@@ -15,7 +15,7 @@ const CustomersPage = () => {
       <div>
         <h1 className="text-2xl font-bold">Customers</h1>
         <p className="text-base-content/70 mt-1">
-          {customers.length} {customers.length === 1 ? "customer" : "customers"}{" "}
+          {customers.length} {customers.length === 1 ? "customer" : "customers"}
           registered
         </p>
       </div>
@@ -26,6 +26,13 @@ const CustomersPage = () => {
           {isLoading ? (
             <div className="flex justify-center py-12">
               <span className="loading loading-spinner loading-lg" />
+            </div>
+          ) : isError ? (
+            <div className="text-center py-12 text-base-content/60">
+              <p className="text-xl font-semibold mb-2">
+                Failed to load customers
+              </p>
+              <p className="text-sm">{error?.message ?? "Please try again."}</p>
             </div>
           ) : customers.length === 0 ? (
             <div className="text-center py-12 text-base-content/60">
