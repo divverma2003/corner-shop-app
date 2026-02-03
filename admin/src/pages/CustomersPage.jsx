@@ -10,7 +10,7 @@ const CustomersPage = () => {
 
   const customers = data || [];
   return (
-    <div className="spacey-6">
+    <div className="space-y-6">
       {/* HEADER */}
       <div>
         <h1 className="text-2xl font-bold">Customers</h1>
