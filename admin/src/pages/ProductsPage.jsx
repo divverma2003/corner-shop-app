@@ -94,7 +94,7 @@ const ProductsPage = () => {
     });
     // Revoke blob URLs to prevent memory leaks
     imagePreviews.forEach((url) => {
-      URL.revokeObjectURL(url);
+      if (url.startsWith("blob:")) URL.revokeObjectURL(url);
     });
 
     setImages([]);

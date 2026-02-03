@@ -129,7 +129,9 @@ export const updateOrderStatus = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    if (!["Pending", "Shipped", "Delivered"].includes(status)) {
+    const statusToLower = status.toLowerCase();
+
+    if (!["pending", "shipped", "delivered"].includes(statusToLower)) {
       return res.status(400).json({ error: "Invalid status" });
     }
 
@@ -138,18 +140,17 @@ export const updateOrderStatus = async (req, res) => {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    order.status = status;
+    order.status = statusToLower;
 
-    if (status === "Shipped" && !order.shippedAt) {
+    if (statusToLower === "shipped" && !order.shippedAt) {
       order.shippedAt = new Date();
     }
 
-    if (status === "Delivered" && !order.deliveredAt) {
+    if (statusToLower === "delivered" && !order.deliveredAt) {
       order.deliveredAt = new Date();
     }
 
     await order.save();
-    console.error("Update order status error:", error);
 
     return res
       .status(200)

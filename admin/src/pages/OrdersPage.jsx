@@ -26,7 +26,7 @@ const OrdersPage = () => {
     updateStatusMutation.mutate({ orderId, status: newStatus });
   };
 
-  const orders = ordersData?.orders || [];
+  const orders = ordersData || [];
 
   return (
     <div className="space-y-6">

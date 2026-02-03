@@ -52,7 +52,15 @@ export const createReview = async (req, res) => {
       });
     }
 
-    // check if review already exists
+    // verify product exists
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        error: "Product not found",
+      });
+    }
+
+    // upsert review
     const review = await Review.findOneAndUpdate(
       { productId, userId: user._id },
       { rating, orderId, productId, userId: user._id },
@@ -75,17 +83,9 @@ export const createReview = async (req, res) => {
 
     // then, update the product with these stats
     const stats = reviews[0] || { avgRating: 0, count: 0 };
-    const updatedProduct = await Product.findByIdAndUpdate(productId, {
-      averageRating: stats.avgRating,
-      totalReviews: stats.count,
-    });
-
-    if (!updatedProduct) {
-      await Review.findByIdAndDelete(review._id);
-      return res.status(404).json({
-        error: "Product not found",
-      });
-    }
+    product.averageRating = stats.avgRating;
+    product.totalReviews = stats.count;
+    await product.save();
 
     return res
       .status(201)
