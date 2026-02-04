@@ -22,7 +22,7 @@ Sentry.init({
   // for example: auto IP address capture on events
   sendDefaultPii: true,
   enableLogs: true,
-  integrations: [new Sentry.replayIntegration()],
+  integrations: [Sentry.replayIntegration()],
   replaysOnErrorSampleRate: 1.0,
 });
 
