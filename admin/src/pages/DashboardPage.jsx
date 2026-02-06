@@ -90,6 +90,7 @@ const DashboardPage = () => {
           </div>
         ))}
       </div>
+
       {/* RECENT ORDERS */}
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">

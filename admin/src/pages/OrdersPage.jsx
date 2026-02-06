@@ -23,8 +23,12 @@ const OrdersPage = () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
     },
     onError: (error) => {
-      console.error("Error updating order status:", error);
       toast.error("Failed to update order status. Please try again.");
+
+      Sentry.captureException(error, {
+        tags: { component: "OrdersPage" },
+        extra: { context: "update_order_status" },
+      });
     },
   });
 

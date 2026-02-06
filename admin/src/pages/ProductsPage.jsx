@@ -49,8 +49,11 @@ const ProductsPage = () => {
       });
     },
     onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { component: "ProductsPage" },
+        extra: { context: "create_product" },
+      });
       toast.error("Failed to create product. Please try again.");
-      console.error("Create product error:", error);
     },
   });
 
@@ -67,7 +70,10 @@ const ProductsPage = () => {
     },
     onError: (error) => {
       toast.error("Failed to update product. Please try again.");
-      console.error("Update product error:", error);
+      Sentry.captureException(error, {
+        tags: { component: "ProductsPage" },
+        extra: { context: "update_product" },
+      });
     },
   });
 
@@ -81,7 +87,10 @@ const ProductsPage = () => {
     },
     onError: (error) => {
       toast.error("Failed to delete product. Please try again.");
-      console.error("Delete product error:", error);
+      Sentry.captureException(error, {
+        tags: { component: "ProductsPage" },
+        extra: { context: "delete_product" },
+      });
     },
   });
 
