@@ -123,18 +123,43 @@ const ProductsPage = () => {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    // todo: use a modal to show error
-    if (files.length > 3) {
+    if (files.length === 0) return;
+
+    const totalImages =
+      images.length +
+      // count how many of the current previews are blobs (newly added) vs existing urls
+      imagePreviews.filter((p) => !p.startsWith("blob:")).length +
+      files.length;
+    if (totalImages > 3) {
       toast.error("Maximum 3 images allowed");
       return;
     }
 
-    // revoke previous object URLs to avoid memory leaks
-    imagePreviews.forEach((url) => {
-      if (url.startsWith("blob:")) URL.revokeObjectURL(url);
-    });
-    setImages(files);
-    setImagePreviews(files.map((file) => URL.createObjectURL(file)));
+    setImages((prev) => [...prev, ...files]);
+    setImagePreviews((prev) => [
+      ...prev,
+      ...files.map((file) => URL.createObjectURL(file)),
+    ]);
+
+    // reset file input so the same file can be re-selected if removed
+    e.target.value = null;
+  };
+
+  const handleRemoveImage = (index) => {
+    const preview = imagePreviews[index];
+    const isBlob = preview.startsWith("blob:");
+
+    // if it's a blob url, we need to revoke it and remove the corresponding file from images state
+    if (isBlob) {
+      URL.revokeObjectURL(preview);
+      // find the index within the new-files array
+      const blobIndex =
+        imagePreviews.slice(0, index + 1).filter((p) => p.startsWith("blob:"))
+          .length - 1;
+      setImages((prev) => prev.filter((_, i) => i !== blobIndex));
+    }
+
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (e) => {
@@ -409,7 +434,7 @@ const ProductsPage = () => {
                   multiple
                   onChange={handleImageChange}
                   className="file-input file-input-bordered file-input-primary w-full"
-                  required={!editingProduct}
+                  required={!editingProduct && imagePreviews.length === 0}
                 />
 
                 {editingProduct && (
@@ -420,12 +445,21 @@ const ProductsPage = () => {
               </div>
 
               {imagePreviews.length > 0 && (
-                <div className="flex gap-2 mt-2">
+                <div className="flex gap-3 mt-3 flex-wrap">
                   {imagePreviews.map((preview, index) => (
-                    <div key={index} className="avatar">
-                      <div className="w-20 rounded-lg">
-                        <img src={preview} alt={`Preview ${index + 1}`} />
+                    <div key={index} className="relative group">
+                      <div className="avatar">
+                        <div className="w-20 rounded-lg">
+                          <img src={preview} alt={`Preview ${index + 1}`} />
+                        </div>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="btn btn-circle btn-xs btn-error absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <XIcon className="size-3" />
+                      </button>
                     </div>
                   ))}
                 </div>
