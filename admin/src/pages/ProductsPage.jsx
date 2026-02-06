@@ -10,6 +10,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { productApi } from "../lib/api.js";
 import { getStockStatusBadge } from "../lib/utils.js";
 import { categories } from "../lib/constants.js";
+import toast from "react-hot-toast";
 
 const ProductsPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -39,13 +40,16 @@ const ProductsPage = () => {
       // upon success, close modal and refetch products list by
       // invalidating the products query and letting it run again
       // purpose: to update the list in UI
+
       closeModal();
+      toast.success("Product created successfully!");
+
       queryClient.invalidateQueries({
         queryKey: ["products"],
       });
     },
     onError: (error) => {
-      alert("Failed to create product. Please try again.");
+      toast.error("Failed to create product. Please try again.");
       console.error("Create product error:", error);
     },
   });
@@ -55,14 +59,14 @@ const ProductsPage = () => {
     // upon success, close modal and refetch products list by
     // invalidating the products query and letting it run again
     onSuccess: () => {
-      // todo: use a toast notification
+      toast.success("Product updated successfully!");
       closeModal();
       queryClient.invalidateQueries({
         queryKey: ["products"],
       });
     },
     onError: (error) => {
-      alert("Failed to update product. Please try again.");
+      toast.error("Failed to update product. Please try again.");
       console.error("Update product error:", error);
     },
   });
@@ -76,7 +80,7 @@ const ProductsPage = () => {
       });
     },
     onError: (error) => {
-      alert("Failed to delete product. Please try again.");
+      toast.error("Failed to delete product. Please try again.");
       console.error("Delete product error:", error);
     },
   });
@@ -120,7 +124,10 @@ const ProductsPage = () => {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     // todo: use a modal to show error
-    if (files.length > 3) return alert("Maximum 3 images allowed");
+    if (files.length > 3) {
+      toast.error("Maximum 3 images allowed");
+      return;
+    }
 
     // revoke previous object URLs to avoid memory leaks
     imagePreviews.forEach((url) => {
@@ -135,7 +142,8 @@ const ProductsPage = () => {
 
     // for new product, images are required
     if (!editingProduct && images.length === 0) {
-      return alert("Please upload at least one image.");
+      toast.error("Please upload at least one image.");
+      return;
     }
 
     const formDataToSend = new FormData();
@@ -262,7 +270,12 @@ const ProductsPage = () => {
       </div>
 
       {/* ADD/EDIT PRODUCT MODAL */}
-      <input type="checkbox" className="modal-toggle" checked={showModal} />
+      <input
+        type="checkbox"
+        className="modal-toggle"
+        checked={showModal}
+        readOnly
+      />
       <div className="modal">
         <div className="modal-box max-w-2xl">
           <div className="flex items-center justify-between mb-4">

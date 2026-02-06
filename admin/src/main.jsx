@@ -6,6 +6,8 @@ import { BrowserRouter } from "react-router";
 import * as Sentry from "@sentry/react";
 
 import App from "./App.jsx";
+import { Toaster } from "react-hot-toast";
+
 import "./index.css";
 
 // import Clerk publishable key from environment variables
@@ -37,6 +39,7 @@ createRoot(document.getElementById("root")).render(
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
+        <Toaster position="top-middle" />
       </ClerkProvider>
     </BrowserRouter>
   </StrictMode>,

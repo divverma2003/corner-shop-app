@@ -1,6 +1,7 @@
 import { orderApi } from "../lib/api.js";
 import { formatDate } from "../lib/utils.js";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const OrdersPage = () => {
   const queryClient = useQueryClient();
@@ -23,7 +24,7 @@ const OrdersPage = () => {
     },
     onError: (error) => {
       console.error("Error updating order status:", error);
-      alert("Failed to update order status. Please try again.");
+      toast.error("Failed to update order status. Please try again.");
     },
   });
 
