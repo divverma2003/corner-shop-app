@@ -14,7 +14,6 @@ export interface Product {
 
 export interface User {
   _id: string;
-
   clerkId: string;
   email: string;
   name: string;
