@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "@/lib/api";
 import { Product } from "@/types/index";
+import { showErrorToast } from "@/lib/toast";
 
 const useWishList = () => {
   const api = useApi();
@@ -30,6 +31,9 @@ const useWishList = () => {
       // Invalidate the wishlist query to refetch the updated wishlist data after adding a product
       queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     },
+    onError: (error) => {
+      showErrorToast("Failed to add to wishlist. Please try again.");
+    },
   });
 
   const removeFromWishlistMutation = useMutation({
@@ -40,6 +44,9 @@ const useWishList = () => {
       return data.data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["wishlist"] }),
+    onError: (error) => {
+      showErrorToast("Failed to remove from wishlist. Please try again.");
+    },
   });
   // helper function to check if a product is in the wishlist, this will be useful for rendering the wishlist icon state in the UI
   const isInWishlist = (productId: string) => {

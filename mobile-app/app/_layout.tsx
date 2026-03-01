@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import Toast from "react-native-toast-message";
 import * as Sentry from "@sentry/react-native";
 
 import "../global.css";
@@ -25,6 +26,7 @@ Sentry.init({
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error: any, query) => {
+      // global error handler for all query errors
       Sentry.captureException(error, {
         tags: {
           type: "react-query-mutation-error",
@@ -58,6 +60,7 @@ export default Sentry.wrap(function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <Stack screenOptions={{ headerShown: false }} />
       </QueryClientProvider>
+      <Toast position="top" />
     </ClerkProvider>
   );
 });
