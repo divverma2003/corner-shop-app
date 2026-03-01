@@ -22,6 +22,11 @@ const cartSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    clerkId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     items: [cartItemSchema],
   },
   { timestamps: true },
