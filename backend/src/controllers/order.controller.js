@@ -17,6 +17,7 @@ export const createOrder = async (req, res) => {
 
     // validate products and stock
     // todo: check frontend to verify this works
+    // todo: use api to verify address instead of relying on frontend validation
     for (const item of orderItems) {
       const product = await Product.findById(item.product._id);
       if (!product) {

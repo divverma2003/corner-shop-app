@@ -27,7 +27,7 @@ const queryClient = new QueryClient({
     onError: (error: any, query) => {
       Sentry.captureException(error, {
         tags: {
-          type: "react-query=error",
+          type: "react-query-mutation-error",
           queryKey: query.queryKey[0]?.toString() || "unknown",
         },
         extra: {
