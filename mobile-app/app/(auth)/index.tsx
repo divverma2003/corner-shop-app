@@ -10,10 +10,10 @@ const AuthScreen = () => {
   // in react - flex is by default row, in react native - column is by default flex
   // justify center - align items in the center of the screen vertically (react native)
   // align items center - align items in the center of the screen horizontally (react native)
-  const { isLoading, handleSocialAuth } = useSocialAuth();
+  const { loadingStrategy, handleSocialAuth } = useSocialAuth();
 
   return (
-    <View className="px-8 flex-1 justify-center items-center bg-white">
+    <View className="px-8 flex-1 justify-center items-center bg-background">
       {/* DEMO IMAGE */}
       <Image
         source={require("@/assets/images/auth-icon.png")}
@@ -21,20 +21,21 @@ const AuthScreen = () => {
         resizeMode="contain"
       />
       {/* Container that holds the buttons and text */}
-      <View className="gap-2 mt-3">
+      <View className="gap-3 mt-3 w-full">
         {/* GOOGLE SIGN IN BUTTON */}
         <TouchableOpacity
-          className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-2"
+          className="flex-row items-center justify-center bg-surface border border-surface-border rounded-full px-6 py-3"
           onPress={() => handleSocialAuth("oauth_google")}
-          disabled={isLoading}
+          disabled={loadingStrategy !== null}
           style={{
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.1,
-            elevation: 2, // for android shadow
+            shadowColor: "#C9A84C",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            elevation: 3,
           }}
         >
-          {isLoading ? (
-            <ActivityIndicator size={"small"} color={"#4285f4"} />
+          {loadingStrategy === "oauth_google" ? (
+            <ActivityIndicator size={"small"} color={"#C9A84C"} />
           ) : (
             <View className="flex-row items-center justify-center">
               <Image
@@ -42,7 +43,7 @@ const AuthScreen = () => {
                 className="size-10 mr-3"
                 resizeMode="contain"
               />
-              <Text className="text-black font-medium text-base">
+              <Text className="text-text-primary font-medium text-base">
                 Continue with Google
               </Text>
             </View>
@@ -51,17 +52,18 @@ const AuthScreen = () => {
 
         {/* APPLE SIGN IN BUTTON */}
         <TouchableOpacity
-          className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-3"
+          className="flex-row items-center justify-center bg-surface border border-surface-border rounded-full px-6 py-3"
           onPress={() => handleSocialAuth("oauth_apple")}
-          disabled={isLoading}
+          disabled={loadingStrategy !== null}
           style={{
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.1,
-            elevation: 2, // for android shadow
+            shadowColor: "#C9A84C",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            elevation: 3,
           }}
         >
-          {isLoading ? (
-            <ActivityIndicator size={"small"} color={"#4285f4"} />
+          {loadingStrategy === "oauth_apple" ? (
+            <ActivityIndicator size={"small"} color={"#C9A84C"} />
           ) : (
             <View className="flex-row items-center justify-center">
               <Image
@@ -69,20 +71,20 @@ const AuthScreen = () => {
                 className="size-8 mr-3"
                 resizeMode="contain"
               />
-              <Text className="text-black font-medium text-base">
+              <Text className="text-text-primary font-medium text-base">
                 Continue with Apple
               </Text>
             </View>
           )}
         </TouchableOpacity>
       </View>
-      <Text className="text-center text-gray-500 text-xs leading-4 mt-6 px-2">
+      <Text className="text-center text-text-secondary text-xs leading-4 mt-6 px-2">
         By signing up, you agree to our
-        <Text className="text-blue-500"> Terms</Text>
+        <Text className="text-primary"> Terms</Text>
         {", "}
-        <Text className="text-blue-500">Privacy Policy</Text>
+        <Text className="text-primary">Privacy Policy</Text>
         {", and "}
-        <Text className="text-blue-500">Cookie Use</Text>
+        <Text className="text-primary">Cookie Use</Text>
       </Text>
     </View>
   );

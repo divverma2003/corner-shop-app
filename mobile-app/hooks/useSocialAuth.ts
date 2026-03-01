@@ -5,12 +5,12 @@ import { Alert } from "react-native";
 // Custom hook to handle social authentication logic
 const useSocialAuth = () => {
   // State to manage loading state during authentication
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
   const { startSSOFlow } = useSSO();
 
   // Function to handle social authentication based on the selected strategy (Google or Apple)
   const handleSocialAuth = async (strategy: "oauth_google" | "oauth_apple") => {
-    setIsLoading(true);
+    setLoadingStrategy(strategy);
 
     try {
       // Start the Single Sign-On (SSO) flow with the selected strategy and handle the session creation
@@ -29,10 +29,10 @@ const useSocialAuth = () => {
         `Failed to sign in with ${provider}. Please try again.`,
       );
     } finally {
-      setIsLoading(false);
+      setLoadingStrategy(null);
     }
   };
-  return { isLoading, handleSocialAuth };
+  return { loadingStrategy, handleSocialAuth };
 };
 
 export default useSocialAuth;

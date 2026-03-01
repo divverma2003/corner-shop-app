@@ -1,0 +1,184 @@
+import useCart from "@/hooks/useCart";
+import useWishlist from "@/hooks/useWishlist";
+import { Product } from "@/types";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
+
+// TODO: Add error handling and loading states
+interface ProductsGridProps {
+  isLoading: boolean;
+  isError: boolean;
+  products: Product[];
+}
+
+const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
+  // Wishlist state and handlers
+  const {
+    isInWishlist,
+    toggleWishlist,
+    isAddingToWishlist,
+    isRemovingFromWishlist,
+  } = useWishlist();
+
+  const { isAddingToCart, addToCart } = useCart();
+  const handleAddToCart = (productId: string, productName: string) => {
+    addToCart(
+      { productId, quantity: 1 },
+      {
+        onSuccess: () => {
+          Alert.alert("Success", `${productName} has been added to your cart!`);
+        },
+        onError: (error: any) => {
+          Alert.alert(
+            "Error",
+            `Failed to add ${productName} to cart, please try again.`,
+          );
+        },
+      },
+    );
+  };
+
+  const renderProduct = ({ item: product }: { item: Product }) => {
+    /* Each product card is a TouchableOpacity that navigates to the product details screen when pressed. 
+      It displays the product image, name, category, price, and average rating. There's also a wishlist icon in the top right corner of the image that users can tap to add/remove the product from their wishlist. The add to cart button is located at the bottom right of the card. */
+    return (
+      <TouchableOpacity
+        className="bg-surface rounded-3xl overflow-hidden mb-3"
+        style={{ width: "48%" }}
+        activeOpacity={0.8}
+        // onPress={() => router.push(`/product/${product._id}`)}
+      >
+        <View className="relative">
+          <Image
+            source={{ uri: product.images[0] }}
+            className="w-full h-44 bg-background-lighter"
+            resizeMode="cover"
+          />
+
+          {/* Wishlist Icon */}
+          <TouchableOpacity
+            className="absolute top-3 right-3 bg-black/30 backdrop-blur-xl p-2 rounded-full"
+            activeOpacity={0.7}
+            onPress={() => toggleWishlist(product._id)}
+            disabled={isAddingToWishlist || isRemovingFromWishlist}
+          >
+            {isAddingToWishlist || isRemovingFromWishlist ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Ionicons
+                name={isInWishlist(product._id) ? "heart" : "heart-outline"}
+                size={18}
+                color={isInWishlist(product._id) ? "#ff6b81" : "#ffffff"}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* Product Details */}
+        <View className="p-3">
+          <Text className="text-text-secondary text-xs mb-1">
+            {product.category}
+          </Text>
+          <Text
+            className="text-text-primary font-bold text-sml mb-2"
+            numberOfLines={2}
+          >
+            {product.name}
+          </Text>
+
+          <View className="flex-row items-center mb-2">
+            <Ionicons name="star" size={12} color="#E2C878" className="mr-1" />
+            <Text className="text-text-primary text-xs font-semibold ml-1">
+              {product.averageRating.toFixed(1)}
+            </Text>
+
+            <Text className="text-text-secondary text-xs ml-1">
+              ({product.totalReviews})
+            </Text>
+          </View>
+
+          <View className="flex-row items-center justify-between">
+            <Text className="text-primary font-bold text-lg">
+              ${product.price.toFixed(2)}
+            </Text>
+
+            {/* Add to Cart Button */}
+            <TouchableOpacity
+              className="bg-primary rounded-full w-8 h-8 items-center justify-center"
+              activeOpacity={0.7}
+              onPress={() => handleAddToCart(product._id, product.name)}
+              disabled={isAddingToCart}
+            >
+              {isAddingToCart ? (
+                <ActivityIndicator size="small" color="#111111" />
+              ) : (
+                <Ionicons name="add" size={18} color="#111111" />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <View className="py-20 items-center justify-center">
+        <ActivityIndicator size="large" color="#00D9FF" />
+        <Text className="text-text-secondary mt-4">Loading products...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View className="py-20 items-center justify-center">
+        <Ionicons name="alert-circle-outline" size={48} color="#ff6b6b" />
+        <Text className="text-text-primary font-semibold mt-4">
+          Failed to load products.
+        </Text>
+        <Text className="text-text-secondary text-sm mt-2">
+          Please try again later.
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <FlatList
+      data={products}
+      renderItem={renderProduct}
+      keyExtractor={(item) => item._id}
+      numColumns={2}
+      columnWrapperStyle={{ justifyContent: "space-between" }}
+      showsVerticalScrollIndicator={false}
+      scrollEnabled={false}
+      ListEmptyComponent={NoProductsFound}
+    />
+  );
+};
+
+const NoProductsFound = () => {
+  return (
+    <View className="py-20 items-center justify-center">
+      <Ionicons name="search-outline" size={48} color={"#111111"} />
+      <Text className="text-text-primary font-semibold mt-4">
+        No products found.
+      </Text>
+      <Text className="text-text-secondary text-sm mt-2">
+        Try adjusting your filters.
+      </Text>
+    </View>
+  );
+};
+
+export default ProductsGrid;
