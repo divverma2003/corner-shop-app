@@ -15,6 +15,8 @@ export const ENV = {
   INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   CLIENT_URL: process.env.CLIENT_URL,
+  GOOGLE_ADDRESS_API_KEY: process.env.GOOGLE_ADDRESS_API_KEY,
+  GOOGLE_ADDRESS_API_BASE_URL: process.env.GOOGLE_ADDRESS_API_BASE_URL,
 };
 
 // Validate required environment variables
@@ -28,6 +30,8 @@ const required = [
   "INNGEST_SIGNING_KEY",
   "ADMIN_EMAIL",
   "CLIENT_URL",
+  "GOOGLE_ADDRESS_API_KEY",
+  "GOOGLE_ADDRESS_API_BASE_URL",
 ];
 
 const missing = required.filter((key) => !ENV[key]);
