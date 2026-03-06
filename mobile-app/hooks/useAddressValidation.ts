@@ -1,0 +1,33 @@
+import { useMutation } from "@tanstack/react-query";
+import { useApi } from "@/lib/api";
+import { Address } from "@/types";
+
+interface UserAddress {
+  userCity: string;
+  userStreetAddress: string;
+  userState: string;
+}
+
+const useAddressValidation = () => {
+  const api = useApi();
+
+  const validateAddressMutation = useMutation({
+    mutationFn: async (userAddress: UserAddress) => {
+      const { data } = await api.post<{
+        data: Pick<Address, "city" | "state" | "streetAddress" | "zipCode">;
+      }>(`/external/validate-address`, { userAddress });
+      return data.data;
+    },
+  });
+
+  return {
+    validateAddress: validateAddressMutation.mutateAsync,
+    isValidating: validateAddressMutation.isPending,
+    validationError: validateAddressMutation.error,
+    validatedAddress: validateAddressMutation.data,
+    isValid: validateAddressMutation.isSuccess,
+    reset: validateAddressMutation.reset,
+  };
+};
+
+export default useAddressValidation;
