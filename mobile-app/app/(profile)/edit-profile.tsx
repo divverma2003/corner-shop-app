@@ -1,10 +1,10 @@
-import React from "react";
+import SafeScreen from "@/components/SafeScreen";
 import { View, Text } from "react-native";
 const EditProfileScreen = () => {
   return (
-    <View>
+    <SafeScreen>
       <Text>Edit Profile</Text>
-    </View>
+    </SafeScreen>
   );
 };
 

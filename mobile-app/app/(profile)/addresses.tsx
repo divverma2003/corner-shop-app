@@ -1,11 +1,11 @@
-import React from "react";
+import SafeScreen from "@/components/SafeScreen";
 import { View, Text } from "react-native";
 
 const AddressesScreen = () => {
   return (
-    <View>
+    <SafeScreen>
       <Text>Addresses</Text>
-    </View>
+    </SafeScreen>
   );
 };
 

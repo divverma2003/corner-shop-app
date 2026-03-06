@@ -1,10 +1,10 @@
-import React from "react";
+import SafeScreen from "@/components/SafeScreen";
 import { View, Text } from "react-native";
 const OrdersScreen = () => {
   return (
-    <View>
+    <SafeScreen>
       <Text>Orders</Text>
-    </View>
+    </SafeScreen>
   );
 };
 
