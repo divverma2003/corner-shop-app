@@ -8,7 +8,7 @@ interface UserAddress {
   userState: string;
 }
 
-const useAddressValidation = () => {
+export const useAddressValidation = () => {
   const api = useApi();
 
   const validateAddressMutation = useMutation({
@@ -22,12 +22,10 @@ const useAddressValidation = () => {
 
   return {
     validateAddress: validateAddressMutation.mutateAsync,
-    isValidating: validateAddressMutation.isPending,
-    validationError: validateAddressMutation.error,
+    isValidatingAddress: validateAddressMutation.isPending,
+    validationAddressError: validateAddressMutation.error,
     validatedAddress: validateAddressMutation.data,
-    isValid: validateAddressMutation.isSuccess,
-    reset: validateAddressMutation.reset,
+    isValidAddress: validateAddressMutation.isSuccess,
+    resetAddress: validateAddressMutation.reset,
   };
 };
-
-export default useAddressValidation;

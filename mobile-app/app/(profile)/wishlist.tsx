@@ -61,7 +61,7 @@ const WishlistScreen = () => {
       {/* HEADER */}
       <View className="px-6 pb-5 border-b border-surface flex-row items-center">
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
         </TouchableOpacity>
         <Text className="text-text-primary text-2xl font-bold">Wishlist</Text>
 
@@ -185,7 +185,7 @@ const LoadingUI = () => {
     <SafeScreen>
       <View className="px-6 pb-5 border-b border-surface flex-row items-center">
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
         </TouchableOpacity>
 
         <Text className="text-text-primary text-2xl">Wishlist</Text>
@@ -204,7 +204,7 @@ const ErrorUI = () => {
     <SafeScreen>
       <View className="px-6 pb-5 border-b border-surface flex-row items-center">
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
         </TouchableOpacity>
 
         <Text className="text-text-primary text-2xl font-bold">Wishlist</Text>

@@ -1,0 +1,81 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useApi } from "@/lib/api";
+import { Address } from "@/types";
+
+export const useAddresses = () => {
+  const api = useApi();
+  const queryClient = useQueryClient();
+
+  const {
+    data: addresses,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["addresses"],
+    queryFn: async () => {
+      const { data } = await api.get<{ data: { addresses: Address[] } }>(
+        `/users/addresses`,
+      );
+      return data.data.addresses;
+    },
+  });
+
+  const addAddressMutation = useMutation({
+    mutationFn: async (newAddress: Omit<Address, "_id">) => {
+      const { data } = await api.post<{ data: { addresses: Address[] } }>(
+        `/users/addresses`,
+        newAddress,
+      );
+      return data.data.addresses;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+  });
+
+  const updateAddressMutation = useMutation({
+    mutationFn: async ({
+      addressId,
+      addressData,
+    }: {
+      addressId: string;
+      addressData: Partial<Omit<Address, "_id">>;
+    }) => {
+      const { data } = await api.put<{ data: { addresses: Address[] } }>(
+        `/users/addresses/${addressId}`,
+        addressData,
+      );
+      return data.data.addresses;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+  });
+
+  const deleteAddressMutation = useMutation({
+    mutationFn: async (addressId: string) => {
+      const { data } = await api.delete<{ data: { addresses: Address[] } }>(
+        `/users/addresses/${addressId}`,
+      );
+      return data.data.addresses;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+  });
+
+  return {
+    addresses: addresses || [],
+    isLoading,
+    isError: !!error,
+    addAddress: addAddressMutation.mutate,
+    updateAddress: updateAddressMutation.mutate,
+    deleteAddress: deleteAddressMutation.mutate,
+    isAddingAddress: addAddressMutation.isPending,
+    addAddressError: addAddressMutation.error,
+    isUpdatingAddress: updateAddressMutation.isPending,
+    updateAddressError: updateAddressMutation.error,
+    isDeletingAddress: deleteAddressMutation.isPending,
+    deleteAddressError: deleteAddressMutation.error,
+  };
+};

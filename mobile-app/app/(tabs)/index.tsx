@@ -95,7 +95,7 @@ const ShopScreen = () => {
             <Ionicons name="search" size={22} color={"#F5F0E8"} />
             <TextInput
               placeholder="Search for products..."
-              placeholderTextColor={"#F5F0E8"}
+              placeholderTextColor={"#A89F91"}
               className="flex-1 ml-3 text-base text-text-primary"
               value={searchQuery}
               onChangeText={setSearchQuery}
