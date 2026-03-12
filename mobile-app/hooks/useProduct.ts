@@ -13,7 +13,7 @@ export const useProduct = (productId: string) => {
       );
       return data.data;
     },
-    enabled: !!productId, // only run this query if productId is truthy
+    enabled: !!productId, // only run this query if productId is truthy (ie. not null or undefined)
   });
   return result;
 };

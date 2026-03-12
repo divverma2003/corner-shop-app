@@ -2,16 +2,18 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-const AddressesHeader = () => {
+const ScreenHeader = ({ screenTitle }: { screenTitle: string }) => {
   return (
     <View className="px-6 pb-5 border-b border-surface flex-row items-center">
       <TouchableOpacity onPress={() => router.back()} className="mr-4">
         <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
       </TouchableOpacity>
 
-      <Text className="text-text-primary text-2xl font-bold">My Addresses</Text>
+      <Text className="text-text-primary text-2xl font-bold">
+        {screenTitle}
+      </Text>
     </View>
   );
 };
 
-export default AddressesHeader;
+export default ScreenHeader;

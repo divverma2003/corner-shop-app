@@ -100,6 +100,7 @@ const ProductDetailPage = () => {
             showsHorizontalScrollIndicator={false}
             scrollEventThrottle={16}
             onScroll={(e) => {
+              // Calculate the index of the currently visible image based on the horizontal scroll offset
               const index = Math.round(e.nativeEvent.contentOffset.x / width);
               setSelectedImageIndex(index);
             }}
@@ -177,6 +178,7 @@ const ProductDetailPage = () => {
             </Text>
           </View>
 
+          {/* Quantity Selector */}
           <View className="mb-6">
             <Text className="text-text-primary text-lg font-bold mb-3">
               Quantity
@@ -185,14 +187,15 @@ const ProductDetailPage = () => {
             <View className="flex-row items-center">
               <TouchableOpacity
                 className="bg-surface rounded-full w-12 h-12 items-center justify-center"
+                // When quantity is 1, disable the button to prevent going below 1
                 onPress={() => setQuantity((q) => Math.max(1, q - 1))}
                 activeOpacity={0.7}
-                disabled={!inStock}
+                disabled={!inStock || quantity <= 1}
               >
                 <Ionicons
                   name="remove"
                   size={24}
-                  color={inStock ? "#F5F0E8" : "#888"}
+                  color={inStock && quantity > 1 ? "#F5F0E8" : "#888"}
                 />
               </TouchableOpacity>
 

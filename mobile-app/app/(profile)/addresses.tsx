@@ -1,5 +1,5 @@
 import SafeScreen from "@/components/SafeScreen";
-import AddressesHeader from "@/components/AddressesHeader";
+import ScreenHeader from "@/components/ScreenHeader";
 import AddressFormModal from "@/components/AddressFormModal";
 import { useAddresses } from "@/hooks/useAddresses";
 import { useAddressValidation } from "@/hooks/useAddressValidation";
@@ -28,7 +28,7 @@ const AddressesScreen = () => {
     isUpdatingAddress,
     updateAddress,
   } = useAddresses();
-  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false); // controls visibility of the add/edit address form modal
 
   const {
     validateAddress,
@@ -38,7 +38,8 @@ const AddressesScreen = () => {
     isValidAddress,
     resetAddress,
   } = useAddressValidation();
-  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null); // stores the ID of the address being edited
+  // empty form state used for both adding and editing addresses. When editing, it will be pre-filled with the address data
   const [addressForm, setAddressForm] = useState({
     label: "",
     fullName: "",
@@ -68,6 +69,7 @@ const AddressesScreen = () => {
   const handleEditAddress = (address: Address) => {
     setShowAddressForm(true);
     setEditingAddressId(address._id);
+    // pre-fill the form with the existing address data for editing
     setAddressForm({
       label: address.label,
       fullName: address.fullName,
@@ -169,18 +171,19 @@ const AddressesScreen = () => {
     }
   };
 
+  // todo: use a component for error and loading states since they are repeated across multiple screens
   if (isLoading) return <LoadingUI />;
   if (isError) return <ErrorUI />;
 
   return (
     <SafeScreen>
-      <AddressesHeader />
+      <ScreenHeader screenTitle="My Addresses" />
 
       {addresses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-6">
           <Ionicons name="location-outline" size={80} color="#00D9FF" />
           <Text className="text-text-primary font-semibold text-xl mt-4">
-            No addresses found.
+            No addresses yet.
           </Text>
           <Text className="text-text-secondary text-center mt-2">
             Add your first delivery address.
@@ -231,6 +234,7 @@ const AddressesScreen = () => {
 
       <AddressFormModal
         visible={showAddressForm}
+        // double bang operators convert the editingAddressId to a boolean
         isEditing={!!editingAddressId}
         addressForm={addressForm}
         isAddingAddress={isAddingAddress}
@@ -246,7 +250,7 @@ const AddressesScreen = () => {
 const ErrorUI = () => {
   return (
     <SafeScreen>
-      <AddressesHeader />
+      <ScreenHeader screenTitle="My Addresses" />
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
         <Text className="text-text-primary font-semibold text-xl mt-4">
@@ -263,7 +267,7 @@ const ErrorUI = () => {
 const LoadingUI = () => {
   return (
     <SafeScreen>
-      <AddressesHeader />
+      <ScreenHeader screenTitle="My Addresses" />
       <View className="flex-1 items-center justify-center px-6">
         <ActivityIndicator size="large" color="#00D9FF" />
         <Text className="mt-4 text-text-secondary">Loading addresses...</Text>

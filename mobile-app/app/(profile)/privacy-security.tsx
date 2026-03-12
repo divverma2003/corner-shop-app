@@ -2,8 +2,10 @@ import SafeScreen from "@/components/SafeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
+import ScreenHeader from "@/components/ScreenHeader";
 import { View, ScrollView, Switch, Text, TouchableOpacity } from "react-native";
 
+// The object that defines the structure of each security and privacy option in the settings screen
 type SecurityOption = {
   id: string;
   icon: string;
@@ -130,14 +132,7 @@ const PrivacyAndSecurityScreen = () => {
   return (
     <SafeScreen>
       {/* HEADER */}
-      <View className="px-6 pb-5 border-b border-surface flex-row items-center">
-        <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
-        </TouchableOpacity>
-        <Text className="text-text-primary text-2xl font-bold">
-          Privacy & Security
-        </Text>
-      </View>
+      <ScreenHeader screenTitle="Privacy & Security" />
 
       <ScrollView
         className="flex-1"
@@ -175,7 +170,7 @@ const PrivacyAndSecurityScreen = () => {
 
                 {setting.type === "toggle" ? (
                   <Switch
-                    value={setting.value}
+                    value={setting.value} // true or false
                     onValueChange={(value) => handleToggle(setting.id, value)}
                     thumbColor="#FFFFFF"
                     trackColor={{ false: "#2A2A2A", true: "#1DB954" }}

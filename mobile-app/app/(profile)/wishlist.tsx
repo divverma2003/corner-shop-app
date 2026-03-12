@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import ScreenHeader from "@/components/ScreenHeader";
 
 const WishlistScreen = () => {
   const {
@@ -59,16 +60,7 @@ const WishlistScreen = () => {
   return (
     <SafeScreen>
       {/* HEADER */}
-      <View className="px-6 pb-5 border-b border-surface flex-row items-center">
-        <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
-        </TouchableOpacity>
-        <Text className="text-text-primary text-2xl font-bold">Wishlist</Text>
-
-        <Text className="text-text-secondary text-sm ml-auto">
-          {wishlist.length} {wishlist.length === 1 ? "item" : "items"}
-        </Text>
-      </View>
+      <ScreenHeader screenTitle="My Wishlist" />
 
       {/* WISHLIST ITEMS */}
       {wishlist.length === 0 ? (
@@ -103,12 +95,13 @@ const WishlistScreen = () => {
                 key={item._id}
                 className="bg-surface rounded-3xl overflow-hidden mb-3"
                 activeOpacity={0.8}
+                onPress={() => router.push(`/product/${item._id}`)}
               >
                 <View className="flex-row p-4">
                   <Image
                     source={item.images[0]}
                     className="rounded-2xl bg-background-lighter"
-                    style={{ width: 96, height: 96, borderRadius: 8 }}
+                    style={{ width: 96, height: 96, borderRadius: 12 }}
                   />
 
                   <View className="flex-1 ml-4">
@@ -183,13 +176,7 @@ export default WishlistScreen;
 const LoadingUI = () => {
   return (
     <SafeScreen>
-      <View className="px-6 pb-5 border-b border-surface flex-row items-center">
-        <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
-        </TouchableOpacity>
-
-        <Text className="text-text-primary text-2xl">Wishlist</Text>
-      </View>
+      <ScreenHeader screenTitle="My Wishlist" />
 
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#0000ff" />
@@ -202,13 +189,7 @@ const LoadingUI = () => {
 const ErrorUI = () => {
   return (
     <SafeScreen>
-      <View className="px-6 pb-5 border-b border-surface flex-row items-center">
-        <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
-        </TouchableOpacity>
-
-        <Text className="text-text-primary text-2xl font-bold">Wishlist</Text>
-      </View>
+      <ScreenHeader screenTitle="My Wishlist" />
 
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF0000" />

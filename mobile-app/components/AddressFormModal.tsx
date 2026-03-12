@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import SafeScreen from "./SafeScreen";
 import { Ionicons } from "@expo/vector-icons";
-import { isRunningInExpoGo } from "expo";
 
 interface AddressFormData {
   label: string;
@@ -54,11 +53,12 @@ const AddressFormModal = ({
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
+        // On iOS, the keyboard will push the content up. On Android, it will resize the view. This ensures the form is still accessible when the keyboard is open.
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <SafeScreen>
-          {/* HEADER */}
+          {/* HEADER FOR MODAL */}
           <View className="px-6 py-5 border-b border-surface flex-row items-center justify-between">
             <Text className="text-text-primary text-2xl font-bold">
               {isEditing ? "Edit Address" : "Add New Address"}

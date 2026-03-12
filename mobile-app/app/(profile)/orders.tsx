@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 const OrdersScreen = () => {
   return (
     <SafeScreen>
-      <Text>Orders</Text>
+      <Text className="text-white">Orders</Text>
     </SafeScreen>
   );
 };

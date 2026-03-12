@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 const EditProfileScreen = () => {
   return (
     <SafeScreen>
-      <Text>Edit Profile</Text>
+      <Text className="text-white">Edit Profile</Text>
     </SafeScreen>
   );
 };
