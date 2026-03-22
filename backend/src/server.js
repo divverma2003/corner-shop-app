@@ -14,9 +14,25 @@ import reviewRoutes from "./routes/review.route.js";
 import productRoutes from "./routes/product.route.js";
 import cartRoutes from "./routes/cart.route.js";
 import externalRoutes from "./routes/external.route.js";
+import paymentRoutes from "./routes/payment.route.js";
 
 const app = express();
 const __dirname = path.resolve();
+
+// special handling: Stripe webhook needs raw body parsing middleware
+// apply raw body parser only to the webhook route, otherwise it will interfere with JSON parsing for other routes
+app.use(
+  "/api/payment",
+  (req, res, next) => {
+    if (req.originalUrl === "/api/payment/webhook") {
+      // Stripe requires the raw body to verify the signature, so we use express.raw middleware for this route
+      express.raw({ type: "application/json" })(req, res, next);
+    } else {
+      express.json()(req, res, next); // parse json for non-webhook routes
+    }
+  },
+  paymentRoutes,
+);
 
 app.use(clerkMiddleware()); // adds auth object to request => req.auth
 app.use(express.json());
@@ -35,6 +51,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/external", externalRoutes);
+
 // deployment for frontend
 // serve static files and index.html in production
 // this will allow the frontend and backend to be hosted on the same domain
