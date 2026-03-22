@@ -47,6 +47,12 @@
           "project": "corner-shop-app-react-native",
           "organization": "divya-verma"
         }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.cornerShopApp"
+        }
       ]
     ],
     "experiments": {
