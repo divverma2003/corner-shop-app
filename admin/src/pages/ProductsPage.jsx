@@ -219,7 +219,7 @@ const ProductsPage = () => {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="btn btn-primary gap-2"
+          className="btn btn-secondary gap-2"
         >
           <PlusIcon className="size-5" />
           Add Product
@@ -286,7 +286,7 @@ const ProductsPage = () => {
                       <PencilIcon className="size-5" />
                     </button>
                     <button
-                      className="btn btn-square btn-ghost text-error"
+                      className="btn btn-square btn-error btn-outline"
                       onClick={() => deleteProductMutation.mutate(product._id)}
                     >
                       {deleteProductMutation.isPending ? (
@@ -480,7 +480,7 @@ const ProductsPage = () => {
               <button
                 type="button"
                 onClick={closeModal}
-                className="btn"
+                className="btn btn-ghost"
                 disabled={
                   createProductMutation.isPending ||
                   updateProductMutation.isPending

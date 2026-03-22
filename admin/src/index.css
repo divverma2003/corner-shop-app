@@ -1,9 +1,4 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes:
-    [ "cupcake",
-    "light",
-    "dark",
-    "dracula",
-    "luxury"];
+  themes: cupcake, light, dark, dracula, luxury;
 }

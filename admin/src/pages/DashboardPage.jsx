@@ -30,7 +30,6 @@ const DashboardPage = () => {
     data: statsData,
     isLoading: statsLoading,
     isError: statsError,
-    error: statsErrorMessage,
   } = useQuery({
     queryKey: ["dashboardStats"], // unique key for caching
     queryFn: statsApi.getDashboard,
@@ -48,7 +47,7 @@ const DashboardPage = () => {
         : statsLoading
           ? "..."
           : `$${statsData?.totalRevenue?.toFixed(2) || 0}`,
-      icon: <DollarSignIcon className="size-8" />,
+      icon: <DollarSignIcon className="size-8 text-primary" />,
     },
     {
       name: "Total Orders",
@@ -57,7 +56,7 @@ const DashboardPage = () => {
         : statsLoading
           ? "..."
           : statsData?.totalOrders || 0,
-      icon: <ShoppingBagIcon className="size-8" />,
+      icon: <ShoppingBagIcon className="size-8 text-primary" />,
     },
     {
       name: "Total Customers",
@@ -66,7 +65,7 @@ const DashboardPage = () => {
         : statsLoading
           ? "..."
           : statsData?.totalCustomers || 0,
-      icon: <UsersIcon className="size-8" />,
+      icon: <UsersIcon className="size-8 text-primary" />,
     },
     {
       name: "Total Products",
@@ -75,7 +74,7 @@ const DashboardPage = () => {
         : statsLoading
           ? "..."
           : statsData?.totalProducts || 0,
-      icon: <PackageIcon className="size-8" />,
+      icon: <PackageIcon className="size-8 text-primary" />,
     },
   ];
   return (
@@ -84,7 +83,7 @@ const DashboardPage = () => {
       <div className="stats stats-vertical lg:stats-horizontal shadow w-full bg-base-100">
         {statsCards.map((stat) => (
           <div key={stat.name} className="stat">
-            <div className="stat-figure text-primary">{stat.icon}</div>
+            <div className="stat-figure">{stat.icon}</div>
             <div className="stat-title">{stat.name}</div>
             <div className="stat-value">{stat.value}</div>
           </div>

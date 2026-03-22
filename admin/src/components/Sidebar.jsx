@@ -21,11 +21,9 @@ const Sidebar = () => {
         {/* sidebar header with icon and title */}
         <div className="p-4 w-full">
           <div className="flex items-center gap-3">
-            <div className="size-10 bg-primary rounded-xl flex items-center justify-center shrink-0">
-              <ShoppingBagIcon className="w-6 h-6 text-primary-content" />
-            </div>
+            <ShoppingBagIcon className="size-10 text-primary shrink-0" />
             <span className="text-xl font-bold is-drawer-close:hidden">
-              Admin
+              {user?.firstName}'s Store
             </span>
           </div>
         </div>
@@ -38,9 +36,11 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`is-drawer-close:tooltip is-drawer-close:tooltip-right ${isActive ? "bg-primary text-primary-content" : ""}`}
+                  className={`is-drawer-close:tooltip is-drawer-close:tooltip-right ${isActive ? "bg-base-300" : ""}`}
                 >
-                  {item.icon}
+                  <item.icon
+                    className={`size-5 ${isActive ? "text-primary" : "text-base-content/80"}`}
+                  />
                   <span className="is-drawer-close:hidden">{item.name}</span>
                 </Link>
               </li>

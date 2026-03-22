@@ -13,23 +13,22 @@ export const NAVIGATION = [
   {
     name: "Dashboard",
     path: "/dashboard",
-    icon: <HomeIcon className="size-5" />,
+    icon: HomeIcon,
   },
   {
     name: "Products",
     path: "/products",
-    icon: <ShoppingBagIcon className="size-5" />,
+    icon: ShoppingBagIcon,
   },
-
   {
     name: "Orders",
     path: "/orders",
-    icon: <ClipboardListIcon className="size-5" />,
+    icon: ClipboardListIcon,
   },
   {
     name: "Customers",
     path: "/customers",
-    icon: <UsersIcon className="size-5" />,
+    icon: UsersIcon,
   },
 ];
 
@@ -45,7 +44,7 @@ const Navbar = () => {
         className="btn btn-square btn-ghost"
         aria-label="open sidebar"
       >
-        <PanelLeftIcon className="size-5" />
+        <PanelLeftIcon className="size-5 text-primary" />
       </label>
       {/* dynamic title based on the current path */}
       <div className="flex-1 px-4">
