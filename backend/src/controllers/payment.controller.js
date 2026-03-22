@@ -48,7 +48,6 @@ export const createPaymentIntent = async (req, res) => {
         name: product.name,
         price: product.price,
         quantity: item.quantity,
-        image: product.images[0],
       });
     }
 
