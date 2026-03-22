@@ -51,7 +51,7 @@ export const createPaymentIntent = async (req, res) => {
       });
     }
 
-    const shipping = subtotal > 45 ? 5.99 : 0; // flat shipping rate for simplicity
+    const shipping = subtotal < 45 ? 5.99 : 0; // flat shipping rate for simplicity
     const tax = subtotal * 0.07; // 7% tax
     const total = subtotal + shipping + tax;
 
