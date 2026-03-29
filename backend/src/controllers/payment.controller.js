@@ -150,7 +150,7 @@ export const handleWebhook = async (req, res) => {
       }
 
       // create the order
-      const order = new Order.create({
+      const order = await Order.create({
         user: userId,
         clerkId,
         orderItems: JSON.parse(orderItems),
