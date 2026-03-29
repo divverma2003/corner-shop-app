@@ -66,7 +66,7 @@ const ProductDetailPage = () => {
           onPress={() => router.back()}
           activeOpacity={0.7}
         >
-          <Ionicons name="arrow-back" size={24} color="#F5F0E8" />
+          <Ionicons name="arrow-back" size={28} color="#F5F0E8" />
         </TouchableOpacity>
 
         <TouchableOpacity
